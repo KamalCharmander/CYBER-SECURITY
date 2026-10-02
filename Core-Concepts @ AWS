@@ -1,0 +1,72 @@
+### **Core Concepts & Definitions**
+* **Cybersecurity**: A body of technologies, processes, and practices designed to protect networks, devices, and data from unauthorized access [1].
+* **Vulnerability vs. Threat vs. Attack**:
+  * **Vulnerability**: A weakness or gap in a system's design that makes exploitation possible (e.g., SQL Injection) [1].
+  * **Threat**: The possibility or likelihood of a security incident or malicious action that has the potential to cause harm (e.g., Phishing, DDoS attacks) [1].
+  * **Attack**: An offensive action taken to exploit a weakness [1]. A harmful act occurs when a threat exploits a vulnerability, breaking security controls and leading to data loss [1].
+* **4 Core Objectives**: Ensure **Confidentiality**, maintain **Integrity**, guarantee **Availability**, and establish **Accountability & Risk Mitigation** [1].
+
+> **AWS Fresher Interview Mapping**: Interviewers frequently test this distinction using the **AWS Shared Responsibility Model**. AWS manages security *of* the cloud (infrastructure, physical hardware, perimeter), while customers manage security *in* the cloud (patching OS vulnerabilities, configuring IAM permissions, and securing applications against threats).
+
+---
+
+### **The CIA Triad**
+* **Confidentiality**: Ensures sensitive data is accessible only to authorized users [2]. 
+  * *Standard Measures*: Data Encryption, Biometric Verification, 2FA, and Security Tokens (e.g., encrypting credit card details during payment gateway transactions) [2].
+  * *AWS Services*: **AWS KMS** (Key Management Service) for data encryption at rest, **AWS Secrets Manager**, and **AWS IAM** / **Cognito MFA**.
+* **Integrity**: Protects information from unauthorized modification [3].
+  * *Standard Measures*: Cryptographic checksums, file permissions, uninterruptible power supply (UPS), data backups, digital signatures, and hash comparisons [3].
+  * *AWS Services*: **AWS KMS Digital Signatures**, **S3 Object Lock** (WORM model), **S3 Versioning**, and **SHA-256 Checksums**.
+* **Availability**: Ensures authorized parties can access information whenever needed [3].
+  * *Standard Measures*: Hardware redundancy, firewalls, regular external backups, and high-availability server clustering [3].
+  * *AWS Services*: **Multi-AZ Deployments**, **AWS Auto Scaling**, **Elastic Load Balancing (ELB)**, and **AWS Backup**.
+
+---
+
+### **7 Layers of Security (Defense-in-Depth)**
+Your notes lay out a 7-layer defense model [3, 4], which directly mirrors the AWS **Defense-in-Depth** strategy:
+1. **Mission Critical Assets**: Core databases, trade secrets, and sensitive assets needing maximum protection [3] \\(\rightarrow\\) *AWS*: DynamoDB/RDS with KMS encryption and automated backups.
+2. **Data Security**: Protects data from unauthorized access via encryption and backups [3] \\(\rightarrow\\) *AWS*: S3 Bucket Policies, KMS Key Policies, and AWS Backup.
+3. **Application Security**: Secures software code to prevent exploits like Cross-Site Scripting (XSS) and SQL Injection (SQLi) [3] \\(\rightarrow\\) *AWS*: **AWS WAF** (Web Application Firewall) configured with rules against SQLi and XSS.
+4. **Endpoint Security**: Protects user connection points and hardware (laptops) via antivirus and device management [4] \\(\rightarrow\\) *AWS*: **AWS WorkSpaces** and **AWS Systems Manager (SSM)**.
+5. **Network Security**: Controls network traffic using Intrusion Detection Systems (IDS) and network segmentation [4] \\(\rightarrow\\) *AWS*: **Amazon VPC**, Security Groups (stateful firewall), Network ACLs (stateless firewall), and **Amazon GuardDuty**.
+6. **Perimeter Security**: Physical and boundary digital controls like guards and external firewalls [4] \\(\rightarrow\\) *AWS*: **AWS Shield** (DDoS protection), AWS CloudFront, and Internet Gateways.
+7. **Human Layer / Physical Security**: Protects hardware, servers, and networking devices from physical attacks and device theft [4] \\(\rightarrow\\) *AWS*: AWS Physical Data Center Security (managed entirely by AWS).
+
+---
+
+### **Attack Types & Threat Actors**
+* **Active Attacks**: Direct attacks that actively modify data or disrupt system operations [4]:
+  * *Masquerade*: Attacker pretends to be an authorized user [4].
+  * *Replay Attack*: Captured data is retransmitted [4].
+  * *Message Modification*: Altering data in transit (packet headers) [4].
+  * *Denial of Service (DoS)*: Flooding a server to make it unavailable [4].
+* **Passive Attacks**: Attacker observes or eavesdrops without modifying data [4]:
+  * *Eavesdropping*: Intercepting unencrypted network traffic [4].
+  * *Traffic Analysis*: Analyzing traffic patterns even if encrypted [4].
+* **IP Spoofing**: Creating IP packets with forged source IP addresses to conceal identity [2].
+* **Threat Actors**:
+  * *Hackers*: White Hat (ethical, authorized to test security), Black Hat (unethical, illegal cracking for theft/financial gain), and Grey Hat (hack without permission to test security, but without malicious intent to steal/damage) [5].
+  * *Categories*: Identity Thieves (stealing PII/bank details), Internet Stalkers (using spyware), Phishing Scammers (cloned websites/deceptive emails), and Cyber Terrorists (attacking civil/govt infrastructure) [6].
+
+> **AWS Fresher Interview Mapping**: Be ready to explain how **AWS Shield** mitigates DoS/DDoS attacks, how **ACM (AWS Certificate Manager)** with TLS prevents eavesdropping, and how **GuardDuty** detects compromised IAM credentials or anomalous traffic.
+
+---
+
+### **Cyber Law, Compliance & Digital Forensics**
+* **Cyberspace & Regulation**: Cyberspace is a virtual environment of interconnected networks [7]. Cyber security regulations establish legal rules (e.g., IT Act 2000 covering electronic transactions and cybercrimes) [7].
+* **International Law Challenges**: Difficult to enforce because cyberspace transcends national borders and attack attribution is hard [7].
+* **Digital Forensics Lifecycle**: Systematic 6-phase process: **Identification** \\(\rightarrow\\) **Preservation** (securing scene, preventing tampering) \\(\rightarrow\\) **Collection** (creating bit-by-bit images of storage devices) \\(\rightarrow\\) **Examination** (recovering deleted data, decrypting files) \\(\rightarrow\\) **Analysis** (correlating findings, reconstructing events) \\(\rightarrow\\) **Presentation** (writing forensic reports for court) [8, 9].
+* **Digital Evidence & Signatures**: Digital evidence is binary-stored data on disks or emails [9]. Digital signatures verify authenticity, integrity, and origin [9]. Forensics is critical because digital evidence is fragile and courts require admissible evidence [8].
+
+> **AWS Fresher Interview Mapping**: Forensic collection in AWS involves taking **EBS Volume Snapshots** (bit-by-bit copies) of compromised EC2 instances, isolating instances using restricted Security Groups, and auditing event timelines using **AWS CloudTrail** and **VPC Flow Logs**.
+
+---
+
+### **Key AWS Fresher Interview Questions to Practice**
+1. *What is the difference between Security Groups (Stateful) and NACLs (Stateless) in an Amazon VPC?*
+2. *How does AWS WAF protect against OWASP Top 10 vulnerabilities like SQL Injection and XSS?*
+3. *If an EC2 instance is suspected of being compromised, how would you perform forensic preservation in AWS?*
+4. *How do KMS, S3 Bucket Policies, and CloudTrail work together to ensure the CIA Triad for sensitive data?*
+
+💡 Would you like to practice a mock interview session focusing on these questions, or should I build a set of flashcards to help you memorize these concepts?
